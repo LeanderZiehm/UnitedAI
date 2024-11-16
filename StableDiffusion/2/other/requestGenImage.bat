@@ -1,0 +1,2 @@
+py requestGenImage.py
+pause 

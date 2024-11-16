@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Story Generator</title>
+</head>
+
+<body>
+    <h1>AI-Generated Story</h1>
+    <div id="story-container"></div>
+    <button id="generate-story">Start Story</button>
+
+    <script>
+        document.getElementById("generate-story").addEventListener("click", function () {
+            const storyContainer = document.getElementById("story-container");
+            storyContainer.innerHTML = "<p>Generating story...</p>";
+
+            // Send POST request to start_story endpoint
+            fetch("/start_story", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ theme: "A magical forest adventure" })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    storyContainer.innerHTML = "";  // Clear the loading text
+
+                    // Loop through each step and display the text and image
+                    data.story_steps.forEach(step => {
+                        const stepDiv = document.createElement("div");
+                        const textParagraph = document.createElement("p");
+                        textParagraph.textContent = step.text;
+
+                        const imageElement = document.createElement("img");
+                        imageElement.src = `data:image/png;base64,${step.image}`;
+                        imageElement.alt = "Generated Story Image";
+
+                        stepDiv.appendChild(textParagraph);
+                        stepDiv.appendChild(imageElement);
+                        storyContainer.appendChild(stepDiv);
+
+                        const separator = document.createElement("hr");
+                        storyContainer.appendChild(separator);
+                    });
+                })
+                .catch(error => {
+                    storyContainer.innerHTML = "<p>Error generating story.</p>";
+                    console.error("Error:", error);
+                });
+        });
+    </script>
+</body>
+
+</html>

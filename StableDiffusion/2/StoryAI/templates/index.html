@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Story Generator</title>
+</head>
+
+<body>
+    <h1>AI-Generated Story</h1>
+    <div id="story-container"></div>
+    <button id="generate-story">Start Story</button>
+
+    <script>
+        document.getElementById("generate-story").addEventListener("click", function () {
+            const storyContainer = document.getElementById("story-container");
+            storyContainer.innerHTML = "<p>Generating story...</p>";
+
+            fetch("/start_story", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ theme: "A magical forest adventure" })
+            })
+                .then(response => {
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder("utf-8");
+
+                    function readChunk() {
+                        reader.read().then(({ done, value }) => {
+                            if (done) {
+                                storyContainer.innerHTML += "<p>Story complete!</p>";
+                                return;
+                            }
+
+                            const chunk = decoder.decode(value, { stream: true });
+                            chunk.split("\n").forEach(line => {
+                                if (line.trim()) {
+                                    const data = JSON.parse(line);
+
+                                    if (data.text) {
+                                        const textParagraph = document.createElement("p");
+                                        textParagraph.textContent = data.text;
+                                        storyContainer.appendChild(textParagraph);
+                                    } else if (data.image) {
+                                        const imageElement = document.createElement("img");
+                                        imageElement.src = `data:image/png;base64,${data.image}`;
+                                        imageElement.alt = "Generated Story Image";
+                                        storyContainer.appendChild(imageElement);
+
+                                        const separator = document.createElement("hr");
+                                        storyContainer.appendChild(separator);
+                                    }
+                                }
+                            });
+
+                            readChunk(); // Continue reading the next chunk
+                        });
+                    }
+
+                    readChunk();
+                })
+                .catch(error => {
+                    storyContainer.innerHTML = "<p>Error generating story.</p>";
+                    console.error("Error:", error);
+                });
+        });
+    </script>
+</body>
+
+</html>

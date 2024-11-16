@@ -1,0 +1,20 @@
+
+
+https://ollama.com/download
+curl -fsSL https://ollama.com/install.sh | sh
+
+
+https://www.anaconda.com/download/success
+https://repo.anaconda.com/archive/Anaconda3-2024.10-1-Linux-x86_64.sh
+
+
+https://jupyter.org/install
+
+jupyter notebook
+
+jupyter notebook --no-browser --port=8888
+
+
+
+
+

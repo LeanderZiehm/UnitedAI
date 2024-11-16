@@ -1,0 +1,2 @@
+py DeggsImageGenerationAPI.py
+pause 
