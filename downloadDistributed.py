@@ -2,13 +2,11 @@ import requests
 import os
 import time
 import random
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 from dotenv import load_dotenv
 from pymongo import MongoClient
 import csv
 import random
-
-
 
 # Load environment variables
 load_dotenv()
@@ -20,6 +18,8 @@ db = client["arxiv"]
 logs_collection = db["logs"]
 links_collection = db["links_to_download"]
 
+
+UTC = timezone.utc
 # Function to get current UTC time
 def getTime():
     return datetime.now(UTC)
