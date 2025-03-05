@@ -74,7 +74,14 @@ while True:
         break  # Stop when no unprocessed links are left
 
     # Get the next unprocessed link
-    next_unprocessed_link = links_collection.find_one({"processedAt": {"$exists": False}})
+    # next_unprocessed_link = links_collection.find_one({"processedAt": {"$exists": False}})
+
+    next_unprocessed_link = links_collection.find_one_and_update(
+        {"processedAt": {"$exists": False}},  # Find an unprocessed link
+        {"$set": {"processedAt": datetime.utcnow()}},  # Set processedAt to current time
+        return_document=True  # Returns the document before update
+    )
+
     
     if not next_unprocessed_link:
         break  # Safety check: Exit if no more unprocessed links
