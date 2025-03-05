@@ -1,3 +1,6 @@
+.env
 
-Word2Vec/Word2Vec/GoogleNews-vectors-negative300.bin
-Word2Vec/GoogleNews-vectors-negative300.bin
+arxiv_papers
+/exe
+/oldMongoDBSync
+downloadDistributed - Copy.py
