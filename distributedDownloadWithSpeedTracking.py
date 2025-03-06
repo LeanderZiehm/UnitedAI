@@ -120,7 +120,7 @@ while True:
             global_download_count = downloads_collection.count_documents({"timestamp": {"$gte": lastCheck}})
 
             active_devices_count = active_devices_collection.count_documents(
-                {"last_heartbeat": {"$gte": getTime() - timedelta(seconds=5)}}
+                {"last_heartbeat": {"$gte": getTime() - timedelta(seconds=10)}}
             )
 
             elapsed_time = time.time() - start_time
