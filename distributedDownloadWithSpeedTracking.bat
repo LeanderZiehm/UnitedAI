@@ -1,0 +1,2 @@
+py distributedDownloadWithSpeedTracking.py
+pause
