@@ -1,2 +1,0 @@
-py downloadDistributed.py
-pause
