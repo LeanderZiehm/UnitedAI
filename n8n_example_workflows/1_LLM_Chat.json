@@ -1,0 +1,146 @@
+{
+  "name": "1_LLM_Chat",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "mode": "webhook",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -140,
+        0
+      ],
+      "id": "12ba0b52-9f1c-4eb3-8c19-7f56e50405ed",
+      "name": "When chat message received",
+      "webhookId": "cb907598-5fa6-4b58-8a64-de39ec36b478"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "d071b5fc-ea3e-44b6-926b-9b84bc8edbdc",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        0,
+        180
+      ],
+      "id": "8476f767-4aa4-4217-96ed-edeaa2cd8978",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "b6jddQUq5gjN3pRm",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        500,
+        0
+      ],
+      "id": "26a0b15f-db45-4f01-a1f0-3f4bdfbe22f2",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7ad67ed7-4006-441b-bffc-19ddb0e1ef2c",
+              "name": "text",
+              "value": "={{ $json.response.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        320,
+        0
+      ],
+      "id": "920c3e4f-1950-4a4f-bc9d-e342402ebe81",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "42a40a5c-ba55-4cba-bf92-efd81204b58c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4bfc52a81b6fbda84aa20d4866cbb66de493d8e054b228f21334d2fe9886112a"
+  },
+  "id": "pKet8R12nADRL7vG",
+  "tags": []
+}
